@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using zorvanz_api.Services;
 using zorvanz_api.ZorvanzDbContext;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,10 +37,14 @@ builder.Services.AddCors(options =>
     });*/
 });
 
+// En Program.cs
+builder.Services.AddScoped<IProductService, ProductServices>();
+
+
 var app = builder.Build();
 
 // Aplicar CORS (antes de los controladores)
-app.UseCors("AllowSpecificOrigins"); // O "AllowAll" según tu caso
+app.UseCors("AllowSpecificOrigins");
 
 if (app.Environment.IsDevelopment())
 {
