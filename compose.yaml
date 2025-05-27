@@ -1,0 +1,7 @@
+﻿services:
+  zorvanz-api:
+    image: zorvanz-api
+    build:
+      context: .
+      dockerfile: zorvanz-api/Dockerfile
+
