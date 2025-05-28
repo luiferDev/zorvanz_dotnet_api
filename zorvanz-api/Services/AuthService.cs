@@ -49,11 +49,10 @@ public class AuthService(UserRepository userRepository, IConfiguration configura
         var byteKey = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException());
         var tokenDes = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
+            Subject = new ClaimsIdentity([
                 new Claim(ClaimTypes.Name, user.UserName ?? throw new InvalidOperationException()), 
-                new Claim(ClaimTypes.Role, user.Role ?? throw new InvalidOperationException()),
-            }), 
+                new Claim(ClaimTypes.Role, user.Role ?? throw new InvalidOperationException())
+            ]), 
             Expires = DateTime.UtcNow.AddDays(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(byteKey), 
                 SecurityAlgorithms.HmacSha256Signature)
