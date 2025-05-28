@@ -19,18 +19,22 @@ public class ProductServices(ZorvanzContext context) : IProductService
         var products = await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .Select(pr => new ProductDto
-            {
-                Id = pr.Id,
-                Name = pr.Name,
-                Description = pr.Description,
-                Price = pr.Price,
-                CategoryId = pr.Category!.Id,
-                CategoryName = pr.Category.CategoryName,
-                ImageUrl = pr.ImageUrl,
-                Popularity = pr.Popularity,
-                Stock = pr.Stock
-            })
+            .Select(p => new ProductDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    Category = new CategoryDto()
+                    {
+                        Id = p.Category!.Id,
+                        CategoryName = p.Category.CategoryName
+                    },
+                    ImageUrl = p.ImageUrl,
+                    Popularity = p.Popularity,
+                    Stock = p.Stock
+                }
+            )
             .ToListAsync();
 
         return new PagedResponse<ProductDto>(products, pageNumber, pageSize, totalRecords);
@@ -52,8 +56,11 @@ public class ProductServices(ZorvanzContext context) : IProductService
             Name = product.Name,
             Description = product.Description,
             Price = product.Price,
-            CategoryId = product.Category?.Id,
-            CategoryName = product.Category?.CategoryName,
+            Category = new CategoryDto()
+            {
+                Id = product.Category!.Id,
+                CategoryName = product.Category.CategoryName
+            },
             ImageUrl = product.ImageUrl,
             Popularity = product.Popularity,
             Stock = product.Stock
@@ -86,8 +93,11 @@ public class ProductServices(ZorvanzContext context) : IProductService
             Name = product.Name,
             Description = product.Description,
             Price = product.Price,
-            CategoryId = category.Id,
-            CategoryName = category.CategoryName,
+            Category = new CategoryDto()
+            {
+                Id = category.Id,
+                CategoryName = category.CategoryName
+            },
             ImageUrl = product.ImageUrl,
             Popularity = product.Popularity,
             Stock = product.Stock
@@ -140,12 +150,17 @@ public class ProductServices(ZorvanzContext context) : IProductService
             anyUpdates = true;
         }
 
-        if (updates.CategoryId.HasValue)
+        if (updates.CategoryId.HasValue && product.Category != null && product.Category.Id != updates.CategoryId.Value)
         {
-            var category = await context.Categories.FindAsync(updates.CategoryId.Value);
-            if (category == null)
+            // Verificamos que la categoría existe
+            var categoryExists = await context.Categories
+                .AnyAsync(c => c.Id == updates.CategoryId.Value);
+            
+            if (!categoryExists)
                 throw new KeyNotFoundException($"Category with id {updates.CategoryId} not found");
-            product.CategoryId = updates.CategoryId.Value;
+            
+            // Solo actualizamos el CategoryId
+            product.Category.Id = updates.CategoryId.Value;
             anyUpdates = true;
         }
 
@@ -182,8 +197,11 @@ public class ProductServices(ZorvanzContext context) : IProductService
             Name = product.Name,
             Description = product.Description,
             Price = product.Price,
-            CategoryId = product.Category?.Id,
-            CategoryName = product.Category?.CategoryName,
+            Category = new CategoryDto()
+            {
+                Id = product.Category!.Id,
+                CategoryName = product.Category.CategoryName
+            },
             ImageUrl = product.ImageUrl,
             Popularity = product.Popularity,
             Stock = product.Stock
