@@ -80,7 +80,7 @@ public class ProductServices(ZorvanzContext context) : IProductService
             Price = productDto.Price,
             CategoryId = productDto.CategoryId,
             ImageUrl = productDto.ImageUrl,
-            Popularity = productDto.popularity,
+            Popularity = productDto.Popularity,
             Stock = productDto.Stock
         };
 
