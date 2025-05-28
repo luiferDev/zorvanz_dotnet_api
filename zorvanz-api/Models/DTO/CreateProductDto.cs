@@ -16,5 +16,5 @@ public class CreateProductDto
     [Required]
     [Range(0, int.MaxValue)]
     public int Stock { get; set; }
-    public double? popularity { get; set; }
+    public double? Popularity { get; set; }
 }
