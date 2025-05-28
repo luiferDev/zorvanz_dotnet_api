@@ -128,7 +128,7 @@ public class ProductServices(ZorvanzContext context) : IProductService
         if (product == null)
             throw new KeyNotFoundException($"Product with id {id} not found");
 
-        bool anyUpdates = false;
+        var anyUpdates = false;
 
         if (updates.Name != null)
         {
