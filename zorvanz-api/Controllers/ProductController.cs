@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using zorvanz_api.Models.DTO;
 using zorvanz_api.Services;
@@ -25,7 +26,9 @@ public class ProductController : ControllerBase
     /// <param name="pageSize">Number of items per page (default 9)</param>
     /// <returns>Paged list of products</returns>
     [HttpGet]
-    public async Task<ActionResult<PagedResponse<ProductDto>>> GetProducts([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 9)
+    public async Task<ActionResult<PagedResponse<ProductDto>>> GetProducts(
+        [FromQuery] int pageNumber = 1, 
+        [FromQuery] int pageSize = 9)
     {
         try
         {
@@ -69,6 +72,7 @@ public class ProductController : ControllerBase
     /// <param name="productDto">Product creation data</param>
     /// <returns>Created product details</returns>
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] CreateProductDto productDto)
     {
         try
@@ -93,6 +97,7 @@ public class ProductController : ControllerBase
     /// <param name="id">Product ID to delete</param>
     /// <returns>No content if successful</returns>
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteProduct(Guid id)
     {
         try
@@ -117,6 +122,7 @@ public class ProductController : ControllerBase
     /// <param name="updates">Dictionary of field names and their new values</param>
     /// <returns>Updated product details</returns>
     [HttpPatch("{id:guid}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<ProductDto>> UpdateProductPartially(Guid id, [FromBody] UpdateProductDto updates)
     {
         try
