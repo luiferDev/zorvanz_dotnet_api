@@ -11,6 +11,7 @@ public class ProductServices(ZorvanzContext context) : IProductService
     {
         var query = context.Products
             .Include(p => p.Category)
+            .OrderByDescending(p => p.Popularity)
             .AsNoTracking();
 
         var totalRecords = await query.CountAsync();
