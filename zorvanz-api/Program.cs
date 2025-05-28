@@ -1,4 +1,7 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using zorvanz_api.Services;
 using zorvanz_api.ZorvanzDbContext;
 
@@ -98,8 +101,11 @@ builder.Services.AddCors(options =>
     });*/
 });
 
+
 // En Program.cs
 builder.Services.AddScoped<IProductService, ProductServices>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UserRepository>();
 
 
 var app = builder.Build();
@@ -127,6 +133,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
