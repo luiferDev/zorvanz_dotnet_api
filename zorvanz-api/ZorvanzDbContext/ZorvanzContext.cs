@@ -17,7 +17,6 @@ public partial class ZorvanzContext : DbContext
     public virtual DbSet<Cart> Carts { get; set; }
 
     public virtual DbSet<CartItem> CartItems { get; set; }
-
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }
@@ -27,9 +26,7 @@ public partial class ZorvanzContext : DbContext
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<OrderDetail> OrderDetails { get; set; }
-
     public virtual DbSet<Product> Products { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -145,7 +142,9 @@ public partial class ZorvanzContext : DbContext
             entity.Property(e => e.LastName).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(255);
             entity.Property(e => e.Password).HasMaxLength(255);
-            entity.Property(e => e.Role).HasMaxLength(255);
+            entity.Property(e => e.Role).HasMaxLength(255).HasConversion(
+                v => v.ToString(), // convertir enum a string
+                v => Enum.Parse<Role>(v));;
             entity.Property(e => e.UserName).HasMaxLength(255);
         });
 
