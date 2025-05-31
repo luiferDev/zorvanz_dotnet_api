@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  zorvanz-api:
+    build:
+      context: "/home/luifer991/RiderProjects/zorvanz-api/zorvanz-api"
+      dockerfile: "Dockerfile"
+      target: "build"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/zorvanz-api.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    image: "zorvanz-api:dev"
+    ports: []
+    volumes:
+    - "/home/luifer991/RiderProjects/zorvanz-api/zorvanz-api:/app:rw"
+    - "/home/luifer991/RiderProjects/zorvanz-api:/src:rw"
+    - "/home/luifer991/.nuget/packages:/root/.nuget/packages"
+    working_dir: "/app"
