@@ -6,7 +6,7 @@ using zorvanz_api.Models;
 
 namespace zorvanz_api.Services;
 
-public class AuthService(UserRepository userRepository, IConfiguration configuration)
+public class AuthService(UserRepository userRepository, IConfiguration configuration): IAuthService
 {
     public async Task<bool> RegisterUserAsync(string name, string lastname, string username, string password, string? email)
     {
@@ -61,7 +61,7 @@ public class AuthService(UserRepository userRepository, IConfiguration configura
         return GenerateJwtToken(user);
     }
 
-    private string GenerateJwtToken(User user)
+    public string GenerateJwtToken(User user)
     {
         var jwtSettings = configuration.GetSection("Jwt");
 
