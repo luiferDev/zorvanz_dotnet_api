@@ -1,23 +1,34 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
+﻿# ─── 1) BUILD ───────────────────────────────────────────────────────────
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["zorvanz-api/zorvanz-api.csproj", "zorvanz-api/"]
-RUN dotnet restore "zorvanz-api/zorvanz-api.csproj"
-COPY . .
-WORKDIR "/src/zorvanz-api"
-RUN dotnet build "./zorvanz-api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./zorvanz-api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Copiamos sólo el .csproj y restauramos
+COPY ["zorvanz-api.csproj", "./"]
+RUN dotnet restore "./zorvanz-api.csproj"
 
-FROM base AS final
+# Copiamos el resto del código
+COPY . ./
+
+# Publicamos (incluye build + publish)
+RUN dotnet publish "zorvanz-api.csproj" \
+    -c Release \
+    -o /app/publish \
+    /p:UseAppHost=false
+
+# ─── 2) RUNTIME ─────────────────────────────────────────────────────────
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "zorvanz-api.dll"]
+
+# Configura Kestrel para escuchar en 0.0.0.0:8080
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+RUN dotnet tool install --global dotnet-ef
+
+# Traemos artefactos de publish
+COPY --from=build /app/publish .
+
+# Script para ejecutar migraciones y luego la aplicación
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
