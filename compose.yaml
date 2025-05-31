@@ -2,6 +2,24 @@
   zorvanz-api:
     image: zorvanz-api
     build:
-      context: .
-      dockerfile: zorvanz-api/Dockerfile
+      context: zorvanz-api/
+    container_name: zorvanz_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - zorvanz-db
+  zorvanz-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: zorvanz_db
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: 158365402Luifer@
+      MSSQL_USER: sa
+    ports:
+      - "1433:1433"
+    volumes:
+     - zorvanz-db:/var/opt/mssql
+     - ./zorvanz-db/init.sql:/docker-entrypoint-initdb.d/init.sql
+volumes:
+  zorvanz-db:
 
