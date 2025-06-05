@@ -87,7 +87,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "https://zorvanz.vercel.app") // Especificar dominios permitidos
+        policy.WithOrigins("http://localhost:5173", 
+                "http://localhost:5173/login", 
+                "https://zorvanz.vercel.app",
+                "https://zorvanz.vercel.app/login") // Especificar dominios permitidos
             .AllowAnyHeader() // Permitir cualquier encabezado
             .AllowAnyMethod() // Permitir cualquier método HTTP (GET, POST, etc.)
             .AllowCredentials(); // Permitir cookies o credenciales
