@@ -10,7 +10,7 @@ namespace zorvanz_api.Controllers;
 [Route("[controller]")]
 public class UserController(
     IUserService userService, 
-    UpdatePasswordService updatePasswordService, 
+    UpdatePasswordService updatePasswordService,
     ZorvanzContext context
     ) : ControllerBase
 {
