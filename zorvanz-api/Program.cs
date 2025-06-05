@@ -107,8 +107,10 @@ builder.Services.AddCors(options =>
 
 // En Program.cs
 builder.Services.AddScoped<IProductService, ProductServices>();
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<UpdatePasswordService>();
 
 
 var app = builder.Build();
