@@ -16,4 +16,10 @@ public class UserRepository(ZorvanzContext context)
         await context.Users.AddAsync(user);
         await context.SaveChangesAsync();
     }
+
+    public async Task UpdateUserAsync(User user)
+    {
+        context.Users.Update(user);
+        await context.SaveChangesAsync();
+    }
 }
