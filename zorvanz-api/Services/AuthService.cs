@@ -63,10 +63,11 @@ public class AuthService(UserRepository userRepository, IConfiguration configura
 
     public string GenerateJwtToken(User user)
     {
-        var jwtSettings = configuration.GetSection("Jwt");
+        var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? 
+                     throw new InvalidOperationException("JWT_KEY no está configurada en las variables de entorno");
+        var byteKey = Encoding.UTF8.GetBytes(jwtKey);
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var byteKey = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException());
         var tokenDes = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity([
