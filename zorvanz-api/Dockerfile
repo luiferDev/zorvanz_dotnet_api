@@ -22,7 +22,6 @@ WORKDIR /app
 # Configura Kestrel para escuchar en 0.0.0.0:8080
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
-RUN dotnet tool install --global dotnet-ef
 
 # Traemos artefactos de publish
 COPY --from=build /app/publish .
