@@ -5,6 +5,8 @@ using Microsoft.OpenApi.Models;
 using zorvanz_api.Services;
 using zorvanz_api.ZorvanzDbContext;
 
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -53,9 +55,27 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Configuration.AddEnvironmentVariables();
+
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
+    throw new InvalidOperationException("La variable de entorno 'DB_CONNECTION_STRING' no está definida o está vacía.");
+
+// Cargar conexión a base de datos
+builder.Services.AddDbContext<ZorvanzContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+});
+
 // Configurar JWT Authentication
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException());
+// var jwtSettings = builder.Configuration.GetSection("Jwt");
+// var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new InvalidOperationException());
+
+// Obtener la key desde la variable de entorno
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? 
+             throw new InvalidOperationException("JWT_KEY no está configurada en las variables de entorno");
+var key = Encoding.UTF8.GetBytes(jwtKey);
+
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(opt =>
@@ -71,15 +91,6 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(opt =>
         ValidateIssuer = false,
         IssuerSigningKey = signingkey
     };
-});
-
-
-
-// Cargar conexión a base de datos
-builder.Services.AddDbContext<ZorvanzContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ZorvanzContext")
-                         ?? throw new InvalidOperationException("Connection string 'ZorvanzContext' not found."));
 });
 
 // Configurar CORS
