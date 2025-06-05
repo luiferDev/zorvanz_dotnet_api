@@ -6,7 +6,7 @@ namespace zorvanz_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RegisterController(AuthService authService) : ControllerBase
+public class RegisterController(IAuthService authService) : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> RegisterUser([FromBody] UserRegisterDto request)
