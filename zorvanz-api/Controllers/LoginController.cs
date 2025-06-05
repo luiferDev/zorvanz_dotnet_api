@@ -6,7 +6,7 @@ namespace zorvanz_api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class LoginController(AuthService authService): ControllerBase
+public class LoginController(IAuthService authService): ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> LoginUser([FromBody] LoginUserDto login)
