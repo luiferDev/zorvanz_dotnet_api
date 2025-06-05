@@ -118,8 +118,7 @@ public class ProductServices(ZorvanzContext context) : IProductService
 
     public async Task<ProductDto> UpdateProductPartiallyAsync(Guid id, UpdateProductDto updates)
     {
-        if (updates == null)
-            throw new ArgumentNullException(nameof(updates));
+        ArgumentNullException.ThrowIfNull(updates);
 
         var product = await context.Products
             .Include(p => p.Category)
