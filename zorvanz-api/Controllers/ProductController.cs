@@ -8,17 +8,9 @@ namespace zorvanz_api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ProductController : ControllerBase
+public class ProductController(ILogger<ProductController> logger, IProductService productService)
+    : ControllerBase
 {
-    private readonly ILogger<ProductController> _logger;
-    private readonly IProductService _productService;
-
-    public ProductController(ILogger<ProductController> logger, IProductService productService)
-    {
-        _logger = logger;
-        _productService = productService;
-    }
-
     /// <summary>
     /// Gets a paged list of products
     /// </summary>
@@ -32,12 +24,12 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var products = await _productService.GetProductsAsync(pageNumber, pageSize);
+            var products = await productService.GetProductsAsync(pageNumber, pageSize);
             return Ok(products);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting products");
+            logger.LogError(ex, "Error getting products");
             return StatusCode(500, "An error occurred while retrieving products");
         }
     }
@@ -52,7 +44,7 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var product = await _productService.GetProductByIdAsync(id);
+            var product = await productService.GetProductByIdAsync(id);
             return Ok(product);
         }
         catch (KeyNotFoundException ex)
@@ -61,7 +53,7 @@ public class ProductController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting product with id {Id}", id);
+            logger.LogError(ex, "Error getting product with id {Id}", id);
             return StatusCode(500, "An error occurred while retrieving the product");
         }
     }
@@ -77,7 +69,7 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var product = await _productService.CreateProductAsync(productDto);
+            var product = await productService.CreateProductAsync(productDto);
             return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
         catch (KeyNotFoundException ex)
@@ -86,7 +78,7 @@ public class ProductController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating product");
+            logger.LogError(ex, "Error creating product");
             return StatusCode(500, "An error occurred while creating the product");
         }
     }
@@ -102,7 +94,7 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var deleted = await _productService.DeleteProductAsync(id);
+            var deleted = await productService.DeleteProductAsync(id);
             if (!deleted)
                 return NotFound($"Product with id {id} not found");
 
@@ -110,7 +102,7 @@ public class ProductController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting product with id {Id}", id);
+            logger.LogError(ex, "Error deleting product with id {Id}", id);
             return StatusCode(500, "An error occurred while deleting the product");
         }
     }
@@ -127,7 +119,7 @@ public class ProductController : ControllerBase
     {
         try
         {
-            var product = await _productService.UpdateProductPartiallyAsync(id, updates);
+            var product = await productService.UpdateProductPartiallyAsync(id, updates);
             return Ok(product);
         }
         catch (KeyNotFoundException ex)
@@ -136,7 +128,7 @@ public class ProductController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error updating product with id {Id}", id);
+            logger.LogError(ex, "Error updating product with id {Id}", id);
             return StatusCode(500, "An error occurred while updating the product");
         }
     }
