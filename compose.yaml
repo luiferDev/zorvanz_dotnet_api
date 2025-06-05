@@ -18,8 +18,9 @@
     ports:
       - "1433:1433"
     volumes:
-     - zorvanz-db:/var/opt/mssql
-     - ./zorvanz-db/init.sql:/docker-entrypoint-initdb.d/init.sql
-volumes:
-  zorvanz-db:
+      - sql-server:/var/opt/mssql
 
+volumes:
+  sql-server:
+    external: true
+    name: sql-server
