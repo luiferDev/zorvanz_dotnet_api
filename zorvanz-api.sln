@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zorvanz-tests", "zorvanz-tests\zorvanz-tests.csproj", "{FFADB476-D69C-4ABC-8BD0-88127BCDF54F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,5 +19,9 @@ Global
 		{C9A4C731-B526-41AC-A5A6-D65A52341CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9A4C731-B526-41AC-A5A6-D65A52341CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9A4C731-B526-41AC-A5A6-D65A52341CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFADB476-D69C-4ABC-8BD0-88127BCDF54F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFADB476-D69C-4ABC-8BD0-88127BCDF54F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFADB476-D69C-4ABC-8BD0-88127BCDF54F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFADB476-D69C-4ABC-8BD0-88127BCDF54F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
