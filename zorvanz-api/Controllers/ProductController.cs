@@ -46,6 +46,7 @@ public class ProductController(ILogger<ProductController> logger, IProductServic
         {
             var product = await productService.GetProductByIdAsync(id);
 
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (product == null)
             {
                 return NotFound($"Product with id {id} not found");
