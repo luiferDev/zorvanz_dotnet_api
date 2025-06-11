@@ -45,6 +45,17 @@ public class ProductController(ILogger<ProductController> logger, IProductServic
         try
         {
             var product = await productService.GetProductByIdAsync(id);
+
+            if (product == null)
+            {
+                return NotFound($"Product with id {id} not found");
+            }
+
+            if (product.Id == Guid.Empty)
+            {
+                return BadRequest("Invalid product ID");
+            }
+
             return Ok(product);
         }
         catch (KeyNotFoundException ex)
@@ -57,6 +68,7 @@ public class ProductController(ILogger<ProductController> logger, IProductServic
             return StatusCode(500, "An error occurred while retrieving the product");
         }
     }
+
 
     /// <summary>
     /// Creates a new product
