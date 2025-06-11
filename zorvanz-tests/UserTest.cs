@@ -42,6 +42,9 @@ public class UserTest
         var okResult = Assert.IsType<OkObjectResult>(result);
         var returnedUser = Assert.IsAssignableFrom<UserDto>(okResult.Value);
         Assert.Equal(expectedUsers, returnedUser);
+
+        mockUserService
+            .Verify(service => service.GetUserAsync(username));
     }
     
     [Fact]
@@ -68,6 +71,9 @@ public class UserTest
         // Assert
         var notFoundResult = Assert.IsType<NotFoundObjectResult>(result);
         Assert.Equal("User not found", notFoundResult.Value);
+        
+        mockUserService
+            .Verify(service => service.GetUserAsync(username));
     }
 
 }
